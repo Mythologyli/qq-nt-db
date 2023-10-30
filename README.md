@@ -15,7 +15,7 @@
 
     ![](docs/3.png)
 
-3. 按下F5反编译此函数
+3. 按下 F5 反编译此函数
 
     ![](docs/4.png)
 
@@ -45,7 +45,7 @@
 
 数据库位置：`C:\Users\<USERNAME>\Documents\Tencent Files\<QQ>\nt_qq\nt_db`
 
-你需要的是.db格式的文件。
+你需要的是 .db 格式的文件。
 
 首先，每个数据库文件头部有 1024 个字符的纯文本内容，去除这部分内容：
 
@@ -59,12 +59,11 @@ UNIX
 cat nt_msg.db | tail -c +1025 > nt_msg.clean.db
 ```
 
-此时文件已经可以通过DB Browser for SQLCipher直接查看，注意迭代次数填写4000。
+此时文件已经可以通过 DB Browser for SQLCipher 直接查看，注意迭代次数填写 4000。
 
 下面解释直接解密数据库的方法。
 
 考虑到在 Windows 上编译 sqlcipher 较为困难，笔者使用了 MSYS2 环境并直接安装了`mingw-w64-x86_64-sqlcipher`
-
 
 笔者处理了 `nt_msg.db`、`files_in_chat.db` 两个文件，并将处理后的文件移动到 `data/clean_db`
 
