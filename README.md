@@ -1,7 +1,8 @@
 # QQ NT Windows 数据库解密+图片/文件清理
 
 笔者测试时使用的 QQ 版本：9.9.3-17412
-经验证的QQ版本：9.9.3-17749
+
+经验证的 QQ 版本：9.9.3-17749
 
 ## 找到数据库 `passphrase`
 
@@ -49,15 +50,15 @@
 
 首先，每个数据库文件头部有 1024 个字符的纯文本内容，去除这部分内容：
 
-Windows
-```bash
-type nt_msg.db | more +1025 > nt_msg.clean.db
-```
++ Windows
+    ```bash
+    type nt_msg.db | more +1025 > nt_msg.clean.db
+    ```
 
-UNIX
-```bash
-cat nt_msg.db | tail -c +1025 > nt_msg.clean.db
-```
++ UNIX
+    ```bash
+    cat nt_msg.db | tail -c +1025 > nt_msg.clean.db
+    ```
 
 此时文件已经可以通过 DB Browser for SQLCipher 直接查看，注意迭代次数填写 4000。
 
