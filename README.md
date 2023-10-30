@@ -2,6 +2,8 @@
 
 笔者测试时使用的 QQ 版本：9.9.3-17412
 
+经验证的 QQ 版本：9.9.3-17749
+
 ## 找到数据库 `passphrase`
 
 1. 使用 IDA Pro 打开 `C:\Program Files\Tencent\QQNT\resources\app\versions\9.9.3-17412\wrapper.node`。打开 Strings 视图，搜索 `sqlite3_key_v2`
@@ -14,7 +16,7 @@
 
     ![](docs/3.png)
 
-3. 反编译此函数
+3. 按下 F5 反编译此函数
 
     ![](docs/4.png)
 
@@ -34,23 +36,35 @@
 
     ![](docs/5.png)
 
-    打开一个 Locals 视图查看参数的值
+    打开一个 Locals 视图(调试器视图->本地变量)查看参数的值
 
-5. 每次命中后，跳转到 a3 对应的位置，直到看到如下图所示的 16 位字符串。`#8xxxxxxxxxxx@uJ` 即为我们需要的 `passphrase` (qq版本不同，不一定是这个格式，但总字符数是一样的)
+5. 命中后，跳转到 a3 对应的位置，直到看到如下图所示的 16 位字符串。`#8xxxxxxxxxxx@uJ` 即为我们需要的 `passphrase` (qq版本不同，不一定是这个格式，但总字符数是一样的)
 
     ![](docs/6.png)
 
 ## 导出/修复数据库
 
-数据库位置：`C:\Users\Myth\Documents\Tencent Files\<QQ>\nt_qq\nt_db`
+数据库位置：`C:\Users\<USERNAME>\Documents\Tencent Files\<QQ>\nt_qq\nt_db`
+
+你需要的是 .db 格式的文件。
+
+首先，每个数据库文件头部有 1024 个字符的纯文本内容，去除这部分内容：
+
++ Windows
+    ```bash
+    type nt_msg.db | more +1025 > nt_msg.clean.db
+    ```
+
++ UNIX
+    ```bash
+    cat nt_msg.db | tail -c +1025 > nt_msg.clean.db
+    ```
+
+此时文件已经可以通过 DB Browser for SQLCipher 直接查看，注意迭代次数填写 4000。
+
+下面解释直接解密数据库的方法。
 
 考虑到在 Windows 上编译 sqlcipher 较为困难，笔者使用了 MSYS2 环境并直接安装了`mingw-w64-x86_64-sqlcipher`
-
-首先，数据库文件头部有 1024 个字符的纯文本内容，去除这部分内容：
-
-```bash
-cat nt_msg.db | tail -c +1025 > nt_msg.clean.db
-```
 
 笔者处理了 `nt_msg.db`、`files_in_chat.db` 两个文件，并将处理后的文件移动到 `data/clean_db`
 
